@@ -111,4 +111,11 @@ class SocioController extends Controller
         return view('socios.estadoCuenta', compact('socio', 'abonos'));
     }
 
+    public function mostrarEstadoCuenta($socioId)
+    {
+        $socio = Socio::with(['prestamos', 'pagos'])->findOrFail($socioId);
+        return view('socios.estado-cuenta', compact('socio'));
+    }
+
+
 }

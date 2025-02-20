@@ -19,12 +19,8 @@
                         Socios
                     </x-nav-link>
                     
-                    <x-nav-link href="{{ route('socios.activos') }}" :active="request()->routeIs('socios.activos')">
-                        Registro Adelantos
-                    </x-nav-link>
-
-                    <x-nav-link href="{{ route('adelantos.activos') }}" :active="request()->routeIs('adelantos.activos')">
-                        Abono Adelantos
+                    <x-nav-link href="{{ route('prestamos.socios') }}" :active="request()->routeIs('socios')">
+                        Prestamos
                     </x-nav-link>
                 </div>
             </div>

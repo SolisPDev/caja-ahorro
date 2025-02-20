@@ -13,7 +13,7 @@
             </a>
             <a href="{{ route('aportaciones.create', $socio->id) }}" 
                class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
-                + Nueva Aportación
+                + Nueva Aportación 
             </a>
         </div>
 

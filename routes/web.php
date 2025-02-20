@@ -6,6 +6,9 @@ use App\Http\Controllers\AportacionController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AdelantoController;
 use App\Http\Controllers\AbonoController;
+use App\Http\Controllers\PrestamoController;
+use App\Http\Controllers\PagoPrestamoController;
+
 
 Route::get('/', function () {
     return view('welcome');
@@ -41,6 +44,23 @@ Route::get('/aportaciones/{socio}', [AportacionController::class, 'index'])->nam
    
 
 
+// Rutas para el control de prestamos
+
+Route::get('/prestamos/socios', [PrestamoController::class, 'listarSocios'])->name('prestamos.socios');
+Route::prefix('prestamos')->group(function () {
+    Route::get('/', [PrestamoController::class, 'index'])->name('prestamos.index');
+    Route::get('/create/{socio}', [PrestamoController::class, 'create'])->name('prestamos.create');
+    Route::post('/', [PrestamoController::class, 'store'])->name('prestamos.store');
+    Route::get('/{prestamo}', [PrestamoController::class, 'show'])->name('prestamos.show');
+    Route::get('/{prestamo}/edit', [PrestamoController::class, 'edit'])->name('prestamos.edit');
+    Route::put('/{prestamo}', [PrestamoController::class, 'update'])->name('prestamos.update');
+    Route::delete('/{prestamo}', [PrestamoController::class, 'destroy'])->name('prestamos.destroy');
+    
+
+});
+Route::get('/pagos/create/{prestamo}', [PagoPrestamoController::class, 'create'])->name('pagos.create');
+
+Route::get('/socios/{socio}/estado-cuenta', [SocioController::class, 'mostrarEstadoCuenta'])->name('estado-cuenta.show');
     
 
     

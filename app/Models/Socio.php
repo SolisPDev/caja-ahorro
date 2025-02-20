@@ -10,9 +10,12 @@ class Socio extends Model
 {
     use HasFactory;
 
+    
+    
     protected $fillable = [
         'nombre', 'apellido_paterno', 'apellido_materno',
-        'email', 'telefono', 'fecha_ingreso', 'saldo_ahorro', 'activo'
+        'email', 'telefono', 'saldo_ahorro', 'activo',
+
     ];
 
     // Relación uno a muchos con Aportaciones
@@ -39,7 +42,10 @@ class Socio extends Model
         return $this->hasMany(Abono::class);
     }
 
-    
+    public function pagos()
+    {
+        return $this->hasManyThrough(PagoPrestamo::class, Prestamo::class, 'socio_id', 'prestamo_id');
+    }
 
 }
 

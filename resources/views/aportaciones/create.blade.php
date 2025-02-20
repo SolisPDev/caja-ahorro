@@ -27,7 +27,7 @@
                 </div>
 
                 <div class="flex justify-between mt-6">
-                    <a href="{{ route('dashboard') }}" class="px-4 py-2 bg-gray-600 text-white rounded-lg shadow hover:bg-gray-700">
+                    <a href="{{ route('aportaciones.socio', $socio->id) }}" class="px-4 py-2 bg-gray-600 text-white rounded-lg shadow hover:bg-gray-700">
                         Regresar
                     </a>
                     <x-button>

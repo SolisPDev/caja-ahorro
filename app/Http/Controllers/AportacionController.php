@@ -52,7 +52,8 @@ class AportacionController extends Controller
             $socio->save();
         });
 
-        return redirect()->route('socios.index')->with('success', 'Aportación registrada correctamente.');
+        return redirect()->route('aportaciones.socio', $request->socio_id)
+                     ->with('success', 'Aportación registrada correctamente.');
     }
 
     /**

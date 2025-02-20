@@ -26,11 +26,11 @@
                     <x-label for="telefono" value="Teléfono" />
                     <x-input id="telefono" class="block w-full" type="text" name="telefono" required />
                 </div>
-                <div class="flex justify-between mt-6">
+                <div class="flex justify-between mt-4">
                     <a href="{{ route('socios.index') }}" class="px-4 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-gray-700">
                         Regresar
                     </a>
-                    <x-button class="w-20">Guardar</x-button>
+                    <x-button class="w-30">Guardar</x-button>
                 </div>
             </form>
         </div>
