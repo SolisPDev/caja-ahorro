@@ -11,16 +11,10 @@
                 <p class="text-3xl font-semibold text-green-600 mt-2">$ {{ number_format($saldoTotalAhorro, 2) }}</p>
             </div>
 
-            <!-- Adelantos de quincena activos (agrega la lógica cuando la tengas) -->
-            <div class="p-6 bg-white shadow-lg rounded-lg text-center">
-                <h3 class="text-lg font-bold text-gray-700">Adelantos de Quincenas Activos</h3>
-                <p class="text-3xl font-semibold text-blue-600 mt-2">{{ number_format($adelantosQuincenasActivos, 0) }}</p> <!-- Sustituye con la cantidad real -->
-            </div>
-
             <!-- Préstamos activos (agrega la lógica cuando la tengas) -->
             <div class="p-6 bg-white shadow-lg rounded-lg text-center">
                 <h3 class="text-lg font-bold text-gray-700">Préstamos Activos</h3>
-                <p class="text-3xl font-semibold text-blue-600 mt-2">0</p> <!-- Sustituye con la cantidad real -->
+                <p class="text-3xl font-semibold text-blue-600 mt-2">{{ $prestamosNoPagados }}</p>
             </div>
 
             <!-- Total de Socios Activos (agrega la lógica cuando la tengas) -->

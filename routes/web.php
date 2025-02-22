@@ -4,34 +4,14 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SocioController;
 use App\Http\Controllers\AportacionController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\AdelantoController;
 use App\Http\Controllers\AbonoController;
 use App\Http\Controllers\PrestamoController;
-use App\Http\Controllers\PagoPrestamoController;
-
 
 Route::get('/', function () {
     return view('welcome');
 });
 
 Route::middleware(['auth', 'verified'])->get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-
-// Vista de socios con adelantos activos
-Route::get('/adelantos/activos', [SocioController::class, 'adelantosActivos'])->name('adelantos.activos');
-// Vistas para registro de abonos a los adelantos de quincena 
-Route::get('/adelantos/{adelanto}/abonos/create', [AbonoController::class, 'create'])->name('abonos.create');
-Route::post('/adelantos/{adelanto}/abonos', [AbonoController::class, 'store'])->name('abonos.store');
-Route::middleware(['auth'])->group(function () {
-    Route::get('/adelantos/create/{socio}', [AdelantoController::class, 'create'])->name('adelantos.create');
-    Route::post('/adelantos', [AdelantoController::class, 'store'])->name('adelantos.store');
-    Route::get('/adelantos/{adelanto}/edit', [AdelantoController::class, 'edit'])->name('adelantos.edit');
-    Route::put('/adelantos/{adelanto}', [AdelantoController::class, 'update'])->name('adelantos.update');
-});
-
-
-
-
-
 
 // Vista de estado de cuenta del socio
 Route::get('/socios/{id}/estadoCuenta', [SocioController::class, 'estadoCuenta'])->name('socios.estadoCuenta');
@@ -41,11 +21,8 @@ Route::resource('aportaciones', AportacionController::class)->middleware('auth')
 Route::get('/socios/{socio}/aportaciones', [AportacionController::class, 'showBySocio'])->name('aportaciones.socio');
 Route::get('/aportaciones/create/{socio}', [AportacionController::class, 'create'])->name('aportaciones.create');
 Route::get('/aportaciones/{socio}', [AportacionController::class, 'index'])->name('aportaciones.index');
-   
-
 
 // Rutas para el control de prestamos
-
 Route::get('/prestamos/socios', [PrestamoController::class, 'listarSocios'])->name('prestamos.socios');
 Route::prefix('prestamos')->group(function () {
     Route::get('/', [PrestamoController::class, 'index'])->name('prestamos.index');
@@ -55,13 +32,17 @@ Route::prefix('prestamos')->group(function () {
     Route::get('/{prestamo}/edit', [PrestamoController::class, 'edit'])->name('prestamos.edit');
     Route::put('/{prestamo}', [PrestamoController::class, 'update'])->name('prestamos.update');
     Route::delete('/{prestamo}', [PrestamoController::class, 'destroy'])->name('prestamos.destroy');
-    
-
 });
-Route::get('/pagos/create/{prestamo}', [PagoPrestamoController::class, 'create'])->name('pagos.create');
+// Rutas para abonos (pagos de préstamos)
+Route::prefix('abonos')->group(function () {
+    Route::get('/{prestamo}', [AbonoController::class, 'index'])->name('abonos.index'); // Lista de abonos por préstamo
+    Route::get('/{prestamo}/create', [AbonoController::class, 'create'])->name('abonos.create'); // Formulario para un nuevo abono
+    Route::post('/', [AbonoController::class, 'store'])->name('abonos.store'); // Registrar abono
+    Route::get('/show/{abono}', [AbonoController::class, 'show'])->name('abonos.show'); // Ver detalle de un abono
+    Route::delete('/{abono}', [AbonoController::class, 'destroy'])->name('abonos.destroy'); // Eliminar abono
+});
 
 Route::get('/socios/{socio}/estado-cuenta', [SocioController::class, 'mostrarEstadoCuenta'])->name('estado-cuenta.show');
-    
 
-    
-    
+
+Route::post('/abonos', [AbonoController::class, 'store'])->name('abonos.store');

@@ -9,17 +9,17 @@ class Abono extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['socio_id', 'adelanto_id', 'fecha', 'monto', 'saldo_restante'];
+    protected $fillable = ['socio_id', 'prestamo_id', 'fecha', 'monto', 'saldo_restante'];
 
-    // Relación con el socio
+    // Relación con Socio
     public function socio()
     {
         return $this->belongsTo(Socio::class);
     }
 
-    // Relación con el adelanto
-    public function adelanto()
+    // Relación con Préstamo
+    public function prestamo()
     {
-        return $this->belongsTo(Adelanto::class);
+        return $this->belongsTo(Prestamo::class);
     }
 }

@@ -22,21 +22,21 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($prestamo->pagos as $pago)
+                    @foreach ($prestamo->abonos as $abono)
                         <tr class="border-b">
-                            <td class="px-4 py-2">{{ $pago->fecha_pago }}</td>
-                            <td class="px-4 py-2 text-green-600 font-bold">$ {{ number_format($pago->monto, 2) }}</td>
+                            <td class="px-4 py-2">{{ $abono->fecha }}</td>
+                            <td class="px-4 py-2 text-green-600 font-bold">$ {{ number_format($abono->monto, 2) }}</td>
                         </tr>
                     @endforeach
                 </tbody>
             </table>
             
-            @if ($prestamo->pagos->isEmpty())
-                <p class="text-center text-gray-500 mt-4">No hay pagos registrados.</p>
+            @if ($prestamo->abonos->isEmpty())
+                <p class="text-center text-gray-500 mt-4">No hay abonos registrados.</p>
             @endif
 
             <div class="mt-6">
-                <a href="{{ route('prestamos.index') }}" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">Regresar</a>
+                <a href="{{ route('prestamos.socios') }}" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">Regresar</a>
             </div>
         </div>
     </div>

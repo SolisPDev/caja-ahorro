@@ -38,9 +38,12 @@
                                 Consulta
                             </a>
                             
-                            <a href="" class="px-3 py-1 bg-purple-500 text-white rounded hover:bg-purple-600">
-                                Abonar
-                            </a>
+                            @if($socio->prestamos->isNotEmpty())
+                                <a href="{{ route('abonos.create', ['prestamo' => $socio->prestamos->first()->id]) }}" 
+                                class="px-3 py-1 bg-purple-500 text-white rounded hover:bg-purple-600">
+                                    Abonar
+                                </a>
+                            @endif
                             
                             <a href="{{ route('estado-cuenta.show', $socio->id) }}" class="px-3 py-1 bg-gray-700 text-white rounded hover:bg-gray-800">
                                 Estado Cuenta

@@ -38,23 +38,23 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @if ($socio->pagos && $socio->pagos->isNotEmpty())
-                        @foreach ($socio->pagos as $pago)
+                    @if ($socio->abonos && $socio->abonos->isNotEmpty())
+                        @foreach ($socio->abonos as $abono)
                             <tr class="border-b">
-                                <td class="px-4 py-2">{{ $pago->fecha_pago }}</td>
-                                <td class="px-4 py-2 text-green-600 font-bold">$ {{ number_format($pago->monto, 2) }}</td>
+                                <td class="px-4 py-2">{{ $abono->fecha }}</td>
+                                <td class="px-4 py-2 text-green-600 font-bold">$ {{ number_format($abono->monto, 2) }}</td>
                             </tr>
                         @endforeach
                     @else
                         <tr>
-                            <td colspan="2" class="text-center text-gray-500 py-2">No hay pagos registrados.</td>
+                            <td colspan="2" class="text-center text-gray-500 py-2">No hay abonos registrados.</td>
                         </tr>
                     @endif        
                 </tbody>
             </table>
 
             <div class="mt-6">
-                <a href="{{ route('socios.index') }}" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">Regresar</a>
+                <a href="{{ route('prestamos.socios') }}" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">Regresar</a>
             </div>
         </div>
     </div>

@@ -5,96 +5,90 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Abono;
 use App\Models\Socio;
-use App\Models\Adelanto;
+use App\Models\Prestamo;
+use Carbon\Carbon;
 
 class AbonoController extends Controller
 {
-
     /**
      * Muestra la lista de abonos por socio.
      */
     public function index($socio_id)
     {
         $socio = Socio::findOrFail($socio_id);
-        $abonos = $socio->abonos()->with('adelanto')->orderBy('fecha', 'desc')->get();
-        
+        $abonos = $socio->abonos()->with('prestamo')->orderBy('fecha', 'desc')->get();
+
         return view('abonos.index', compact('socio', 'abonos'));
     }
 
     /**
      * Muestra el formulario para crear un nuevo abono.
      */
-    public function create($adelanto_id)
-    {
-        // Buscar el adelanto por su ID
-        $adelanto = Adelanto::findOrFail($adelanto_id);
+    public function create($prestamo_id)
+{
+    $prestamo = Prestamo::findOrFail($prestamo_id);
+    $socio = $prestamo->socio; // Obtiene el socio asociado al préstamo
 
-        // Obtener el socio relacionado con este adelanto
-        $socio = $adelanto->socio;
-
-        return view('adelantos.abonos.create', compact('adelanto', 'socio'));
+    // Verificar que el préstamo no esté liquidado
+    if ($prestamo->saldo_pendiente <= 0) {
+        return redirect()->route('prestamos.index')->with('error', 'Este préstamo ya está liquidado.');
     }
 
+    return view('abonos.create', compact('prestamo', 'socio')); // Ahora se pasa también $socio
+}
 
+    
     /**
      * Almacena un nuevo abono y actualiza el saldo del adelanto.
     */
-    public function store(Request $request, $adelanto_id)
+    
+    public function store(Request $request)
     {
-        try {
-            // Validación de entrada
-            $request->validate([
-                'monto' => 'required|numeric|min:1',
-                'fecha' => 'required|date',
-            ]);
+        $request->validate([
+            'prestamo_id' => 'required|exists:prestamos,id',
+            'monto' => 'required|numeric|min:1',
+            'fecha' => 'required|date',
+        ]);
 
-            // Buscar el adelanto y su socio
-            $adelanto = Adelanto::findOrFail($adelanto_id);
-            $socio = $adelanto->socio;
+        $prestamo = Prestamo::findOrFail($request->prestamo_id);
+        $socio = $prestamo->socio;
 
-            // Verifica que el abono no supere el saldo pendiente
-            if ($request->monto > $adelanto->saldo_pendiente) {
-                return redirect()->back()->with('error', 'El monto del abono no puede superar el saldo pendiente.');
-            }
-
-            // Calcular nuevo saldo
-            $nuevoSaldo = $adelanto->saldo_pendiente - $request->monto;
-
-            // Registrar el abono
-            Abono::create([
-                'socio_id' => $socio->id,
-                'adelanto_id' => $adelanto->id,
-                'fecha' => $request->fecha, // Usar la fecha proporcionada en el formulario
-                'monto' => $request->monto,
-                'saldo_restante' => $nuevoSaldo,
-            ]);
-
-            // Actualizar saldo pendiente del adelanto
-            $adelanto->update(['saldo_pendiente' => $nuevoSaldo]);
-
-            // Si el saldo pendiente es 0, marcar el adelanto como pagado
-            if ($nuevoSaldo <= 0) {
-                $adelanto->update(['estado' => 'pagado']); // Cambio de 'estatus' a 'estado'
-            }
-
-            return redirect()->route('adelantos.activos', $adelanto->id)
-                            ->with('success', 'Abono registrado correctamente.');
-
-        } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Ocurrió un error al registrar el abono: ' . $e->getMessage());
+        // Verificar que el monto no supere el saldo
+        $nuevoSaldo = $prestamo->saldo_pendiente - $request->monto;
+        if ($nuevoSaldo < 0) {
+            return redirect()->back()->with('error', 'El monto del abono no puede ser mayor al saldo pendiente.');
         }
+
+        // Crear el abono
+        Abono::create([
+            'socio_id' => $socio->id,
+            'prestamo_id' => $prestamo->id,
+            'fecha' => $request->fecha,
+            'monto' => $request->monto,
+            'saldo_restante' => $nuevoSaldo,
+        ]);
+
+        // Actualizar saldo del préstamo
+        $prestamo->update(['saldo_pendiente' => $nuevoSaldo]);
+
+        // Si el saldo llega a 0, marcar el préstamo como pagado
+        if ($nuevoSaldo == 0) {
+            $prestamo->update(['estado' => 'Pagado']);
+        }
+
+        return redirect()->route('prestamos.show', $prestamo->id)->with('success', 'Abono registrado correctamente.');
     }
-
-
 
     /**
      * Muestra los detalles de un abono.
      */
     public function show($id)
     {
-        $abono = Abono::with('socio', 'adelanto')->findOrFail($id);
+        $abono = Abono::with('socio', 'prestamo')->findOrFail($id);
         return view('abonos.show', compact('abono'));
     }
+
+
 
     /**
      * Muestra el formulario para editar un abono.
@@ -135,35 +129,15 @@ class AbonoController extends Controller
 
         // Si el saldo pendiente llega a 0, marcar el adelanto como liquidado
         if ($nuevoSaldo <= 0) {
-            $adelanto->update(['estatus' => 'LIQUIDADO']);
+            $adelanto->update(['estado' => 'pagado']);
         }
 
-        return redirect()->route('abonos.index', $socio->id)
+        return redirect()->route('prestamos.socios', $socio->id)
                          ->with('success', 'Abono actualizado correctamente.');
     }
 
     /**
      * Elimina un abono y ajusta el saldo del adelanto.
      */
-    public function destroy($id)
-    {
-        $abono = Abono::findOrFail($id);
-        $adelanto = $abono->adelanto;
-        $socio = $abono->socio;
-
-        // Revertir el saldo pendiente del adelanto
-        $nuevoSaldo = $adelanto->saldo_pendiente + $abono->monto;
-        $adelanto->update(['saldo_pendiente' => $nuevoSaldo]);
-
-        // Si se eliminó un abono, el adelanto deja de estar liquidado
-        if ($adelanto->estatus === 'LIQUIDADO') {
-            $adelanto->update(['estatus' => 'ACTIVO']);
-        }
-
-        // Eliminar el abono
-        $abono->delete();
-
-        return redirect()->route('abonos.index', $socio->id)
-                         ->with('success', 'Abono eliminado correctamente.');
-    }
+    
 }

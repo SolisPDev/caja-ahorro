@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -10,12 +9,9 @@ class Socio extends Model
 {
     use HasFactory;
 
-    
-    
     protected $fillable = [
         'nombre', 'apellido_paterno', 'apellido_materno',
         'email', 'telefono', 'saldo_ahorro', 'activo',
-
     ];
 
     // Relación uno a muchos con Aportaciones
@@ -30,22 +26,10 @@ class Socio extends Model
         return $this->hasMany(Prestamo::class);
     }
 
-    // Relación uno a muchos con Adelantos
-    public function adelantos()
-    {
-        return $this->hasMany(Adelanto::class);
-    }
-
     // Relación uno a muchos con Abonos
     public function abonos()
     {
-        return $this->hasMany(Abono::class);
+        return $this->hasManyThrough(Abono::class, Prestamo::class);
     }
-
-    public function pagos()
-    {
-        return $this->hasManyThrough(PagoPrestamo::class, Prestamo::class, 'socio_id', 'prestamo_id');
-    }
-
 }
 

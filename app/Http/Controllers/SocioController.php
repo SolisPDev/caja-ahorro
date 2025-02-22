@@ -30,7 +30,7 @@ class SocioController extends Controller
 
         Socio::create($request->all());
 
-        return redirect()->route('dashboard')->with('success', 'Socio agregado correctamente');
+        return redirect()->route('socios.index')->with('success', 'Socio agregado correctamente');
     }
 
     // Listar los socios
@@ -76,7 +76,6 @@ class SocioController extends Controller
         return redirect()->route('socios.index')->with('success', 'Socio eliminado correctamente');
     }
 
-
     // filtra socios activos y permite busqueda por nombre o apellido paterno
     public function indexActivos(Request $request)
     {
@@ -113,7 +112,7 @@ class SocioController extends Controller
 
     public function mostrarEstadoCuenta($socioId)
     {
-        $socio = Socio::with(['prestamos', 'pagos'])->findOrFail($socioId);
+        $socio = Socio::with(['prestamos', 'abonos'])->findOrFail($socioId);
         return view('socios.estado-cuenta', compact('socio'));
     }
 

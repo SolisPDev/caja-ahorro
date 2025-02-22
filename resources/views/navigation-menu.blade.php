@@ -19,7 +19,7 @@
                         Socios
                     </x-nav-link>
                     
-                    <x-nav-link href="{{ route('prestamos.socios') }}" :active="request()->routeIs('socios')">
+                    <x-nav-link href="{{ route('prestamos.socios') }}" :active="request()->routeIs('prestamos.socios')">
                         Prestamos
                     </x-nav-link>
                 </div>
@@ -145,18 +145,16 @@
             <x-responsive-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
                 Panel de Control
             </x-responsive-nav-link>
-            
             <x-responsive-nav-link href="{{ route('socios.index') }}" :active="request()->routeIs('socios.index')">
                 Socios
             </x-responsive-nav-link>
+            <x-responsive-nav-link href="{{ route('prestamos.socios') }}" :active="request()->routeIs('prestamos.socios')">
+                Prestamos
+            </x-responsive-nav-link>
             
-            <x-responsive-nav-link href="{{ route('socios.activos') }}" :active="request()->routeIs('socios.activos')">
-                Registro Adelantos
-            </x-responsive-nav-link>
+            
 
-            <x-responsive-nav-link href="{{ route('adelantos.activos') }}" :active="request()->routeIs('adelantos.activos')">
-                Abono Adelantos
-            </x-responsive-nav-link>
+            
             
         </div>
 

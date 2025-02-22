@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use Illuminate\Http\Request;
 use App\Models\Prestamo;
 use App\Models\Socio;
@@ -78,7 +77,7 @@ class PrestamoController extends Controller
      */
     public function show($id)
     {
-        $prestamo = Prestamo::with('socio', 'pagos')->findOrFail($id);
+        $prestamo = Prestamo::with('socio', 'abonos')->findOrFail($id);
         return view('prestamos.show', compact('prestamo'));
     }
 
@@ -130,7 +129,7 @@ class PrestamoController extends Controller
     {
         $prestamo = Prestamo::findOrFail($id);
 
-        if ($prestamo->pagos()->count() > 0) {
+        if ($prestamo->abonos()->count() > 0) {
             return redirect()->route('prestamos.index')
                 ->with('error', 'No se puede eliminar un préstamo con pagos registrados.');
         }
@@ -145,9 +144,8 @@ class PrestamoController extends Controller
      * Muestra los socios para gestionar el prestamo.
      */
     public function listarSocios()
-{
-    $socios = Socio::all(); // Obtener todos los socios
-    return view('prestamos.socios', compact('socios'));
-}
-
+    {
+        $socios = Socio::all(); // Obtener todos los socios
+        return view('prestamos.socios', compact('socios'));
+    }
 }

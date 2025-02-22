@@ -18,6 +18,9 @@ return new class extends Migration
             $table->decimal('monto', 10, 2);
             $table->decimal('tasa_interes', 5, 2)->default(5.00);
             $table->decimal('saldo_pendiente', 10, 2);
+            $table->decimal('total_pagar', 10, 2);
+            $table->integer('quincenas');
+            $table->date('fecha_inicio');
             $table->enum('estado', ['Activo', 'Pagado', 'Vencido'])->default('Activo');
             $table->timestamps();
         });

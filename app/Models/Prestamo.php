@@ -27,16 +27,22 @@ class Prestamo extends Model
         return $this->belongsTo(Socio::class);
     }
 
-    // Relación uno a muchos con Pagos de Préstamo
-    public function pagos()
+    // Relación con Abonos
+    public function abonos()
     {
-        return $this->hasMany(PagoPrestamo::class);
+        return $this->hasMany(Abono::class);
     }
 
     // Método para calcular el total a pagar basado en el monto y la tasa de interés
     public function calcularTotalPagar()
     {
-        return $this->monto + ($this->monto * ($this->tasa_interes / 100));
+        return $this->monto * (1 + ($this->tasa_interes / 100));
+    }
+
+    // Método para calcular el pago quincenal
+    public function calcularPagoQuincenal()
+    {
+        return $this->calcularTotalPagar() / $this->quincenas;
     }
 
     // Método para verificar si el préstamo sigue activo
@@ -45,9 +51,9 @@ class Prestamo extends Model
         return $this->estado === 'Activo';
     }
 
-    // Método para calcular el monto por quincena
-    public function calcularPagoQuincenal()
+    // Método para calcular el saldo actual tomando en cuenta los abonos
+    public function saldoActual()
     {
-        return $this->total_pagar / $this->quincenas;
+        return $this->calcularTotalPagar() - $this->abonos()->sum('monto');
     }
 }
