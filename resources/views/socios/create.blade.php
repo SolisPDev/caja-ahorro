@@ -11,20 +11,20 @@
                     <x-input id="nombre" class="block w-full" type="text" name="nombre" required />
                 </div>
                 <div class="mt-4">
-                    <x-label for="apellido_paterno" value="Apellido Paterno" />
+                    <x-label for="apellido_paterno" value="Apellidos" />
                     <x-input id="apellido_paterno" class="block w-full" type="text" name="apellido_paterno" required />
                 </div>
                 <div class="mt-4">
-                    <x-label for="apellido_materno" value="Apellido Materno" />
+                    <x-label for="apellido_materno" value="Numero Cuenta" />
                     <x-input id="apellido_materno" class="block w-full" type="text" name="apellido_materno" required />
                 </div>
                 <div class="mt-4">
                     <x-label for="email" value="Correo Electrónico" />
-                    <x-input id="email" class="block w-full" type="email" name="email" required />
+                    <x-input id="email" class="block w-full" type="email" name="email" />
                 </div>
                 <div class="mt-4">
                     <x-label for="telefono" value="Teléfono" />
-                    <x-input id="telefono" class="block w-full" type="text" name="telefono" required />
+                    <x-input id="telefono" class="block w-full" type="text" name="telefono" />
                 </div>
                 <div class="flex justify-between mt-4">
                     <a href="{{ route('socios.index') }}" class="px-4 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-gray-700">

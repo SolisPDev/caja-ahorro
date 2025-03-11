@@ -16,11 +16,11 @@
                     <x-input id="nombre" class="block w-full" type="text" name="nombre" value="{{ old('nombre', $socio->nombre) }}" required />
                 </div>
                 <div class="mb-4">
-                    <x-label for="apellido_paterno" value="Apellido Paterno" />
+                    <x-label for="apellido_paterno" value="Apellidos" />
                     <x-input id="apellido_paterno" class="block w-full" type="text" name="apellido_paterno" value="{{ old('apellido_paterno', $socio->apellido_paterno) }}" required />
                 </div>
                 <div class="mb-4">
-                    <x-label for="apellido_materno" value="Apellido Materno" />
+                    <x-label for="apellido_materno" value="Numero Cuenta" />
                     <x-input id="apellido_materno" class="block w-full" type="text" name="apellido_materno" value="{{ old('apellido_materno', $socio->apellido_materno) }}" required />
                 </div>
 

@@ -6,7 +6,8 @@
     <div class="py-6 max-w-lg mx-auto">
         <div class="bg-white p-6 rounded-lg shadow-lg">
             <h3 class="text-lg font-bold mb-4 text-gray-800">Información de la Aportación</h3>
-            <p><strong>Socio:</strong> {{ $aportacion->socio->nombre }}</p>
+            <p><strong>Numero Cuenta:</strong> {{ $aportacion->socio->apellido_materno  ?? 'Sin Cuenta asignada' }}</p>
+            <p><strong>Socio:</strong> {{ $aportacion->socio->nombre  ?? 'Sin socio asignado' }}</p>
             <p><strong>Monto:</strong> ${{ number_format($aportacion->monto, 2) }}</p>
             <p><strong>Fecha:</strong> {{ $aportacion->fecha_pago }}</p>
 

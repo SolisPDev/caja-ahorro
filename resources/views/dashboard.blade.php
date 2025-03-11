@@ -10,13 +10,17 @@
                 <h3 class="text-lg font-bold text-gray-700">Saldo Total en Ahorro</h3>
                 <p class="text-3xl font-semibold text-green-600 mt-2">$ {{ number_format($saldoTotalAhorro, 2) }}</p>
             </div>
-
+            <!-- Genera las aportaciones automaticas de socios -->
+            <div class="p-6 py-12 bg-white shadow-lg rounded-lg text-center">
+                <a href="{{ route('aportaciones.generar') }}" class="px-4 py-3 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700">Generar Aportaciones</a>
+            </div>
             <!-- Préstamos activos (agrega la lógica cuando la tengas) -->
             <div class="p-6 bg-white shadow-lg rounded-lg text-center">
                 <h3 class="text-lg font-bold text-gray-700">Préstamos Activos</h3>
                 <p class="text-3xl font-semibold text-blue-600 mt-2">{{ $prestamosNoPagados }}</p>
+                <br>
+                <a href="{{ route('socios.estadoPrestamos') }}" class="px-4 py-3 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700">Estado Prestamos</a>
             </div>
-
             <!-- Total de Socios Activos (agrega la lógica cuando la tengas) -->
             <div class="p-6 bg-white shadow-lg rounded-lg text-center">
                 <h3 class="text-lg font-bold text-gray-700">Socios Activos</h3>

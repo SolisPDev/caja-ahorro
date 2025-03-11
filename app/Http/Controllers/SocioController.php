@@ -24,11 +24,17 @@ class SocioController extends Controller
             'nombre' => 'required|string|max:255',
             'apellido_paterno' => 'required|string|max:255',
             'apellido_materno' => 'string|max:255',
-            'email' => 'required|email|unique:socios',
-            'telefono' => 'required|string|max:15',
+            'email' => 'email',
+            'telefono' => 'string|max:15',
         ]);
 
-        Socio::create($request->all());
+        Socio::create([
+            'nombre' => $request->nombre,
+            'apellido_paterno' => $request->apellido_paterno,
+            'apellido_materno' => $request->apellido_materno,
+            'email' => $request->email,
+            'telefono' => $request->telefono,
+        ]);
 
         return redirect()->route('socios.index')->with('success', 'Socio agregado correctamente');
     }
@@ -116,5 +122,37 @@ class SocioController extends Controller
         return view('socios.estado-cuenta', compact('socio'));
     }
 
+    public function sociosPorEstado()
+    {
+        $socios = Socio::with('prestamos')->get()->map(function ($socio) {
+            if ($socio->prestamos->isEmpty()) {
+                $socio->estado_prestamo = 'Sin préstamos';
+            } elseif ($socio->prestamos->where('estado', 'Activo')->isNotEmpty()) {
+                $socio->estado_prestamo = 'Con préstamo activo';
+            } else {
+                $socio->estado_prestamo = 'Con préstamos pagados';
+            }
+            return $socio;
+        });
+        return view('socios.estadoPrestamo', compact('socios'));
+    }
 
+    public function historialPrestamo($socioId)
+    {
+        $socio = Socio::findOrFail($socioId);
+
+        // Buscar el préstamo activo o el último préstamo pagado
+        $prestamo = $socio->prestamos()->orderBy('created_at', 'desc')->first();
+
+        // Si hay préstamo, obtener sus pagos
+        $pagos = $prestamo ? $prestamo->abonos()->orderBy('fecha', 'asc')->get(['monto', 'fecha']) : [];
+
+        return response()->json([
+            'prestamo' => $prestamo ? [
+                'monto' => $prestamo->monto,
+                'estado' => $prestamo->estado
+            ] : null,
+            'pagos' => $pagos
+        ]);
+    }
 }

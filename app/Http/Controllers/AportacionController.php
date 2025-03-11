@@ -12,11 +12,11 @@ class AportacionController extends Controller
     /**
      * Muestra la lista de aportaciones.
      */
-    public function index()
-    {
-        $aportaciones = Aportacion::with('socio')->orderBy('fecha_pago', 'desc')->get();
-        return view('aportaciones.index', compact('aportaciones'));
-    }
+    //public function index()
+    //{
+    //    $aportaciones = Aportacion::with('socio')->orderBy('fecha_pago', 'desc')->get();
+    //    return view('aportaciones.index', compact('aportaciones'));
+    //}
 
     /**
      * Muestra el formulario para crear una nueva aportación.
@@ -75,48 +75,7 @@ class AportacionController extends Controller
     /**
      * Actualiza una aportación en la base de datos.
      */
-    public function update(Request $request, Aportacion $aportacion)
-    {
-        $request->validate([
-            'monto' => 'required|numeric|min:1',
-            'fecha_pago' => 'required|date',
-        ]);
-
-        DB::transaction(function () use ($request, $aportacion) {
-            $socio = $aportacion->socio;
-
-            // Restar el monto anterior del saldo del socio
-            $socio->saldo_ahorro -= $aportacion->monto;
-
-            // Actualizar la aportación
-            $aportacion->update($request->all());
-
-            // Sumar el nuevo monto al saldo del socio
-            $socio->saldo_ahorro += $request->monto;
-            $socio->save();
-        });
-
-        return redirect()->route('aportaciones.index')->with('success', 'Aportación actualizada correctamente.');
-    }
-
-    /**
-     * Elimina una aportación de la base de datos.
-     */
-    public function destroy(Aportacion $aportacion)
-    {
-        DB::transaction(function () use ($aportacion) {
-            $socio = $aportacion->socio;
-
-            // Restar el monto de la aportación eliminada del saldo del socio
-            $socio->saldo_ahorro -= $aportacion->monto;
-            $socio->save();
-
-            // Eliminar la aportación
-            $aportacion->delete();
-        });
-
-        return redirect()->route('aportaciones.index')->with('success', 'Aportación eliminada correctamente.');
-    }
+    
 
     public function showBySocio($socioId)
     {
@@ -124,6 +83,48 @@ class AportacionController extends Controller
         $aportaciones = $socio->aportaciones()->orderBy('fecha_pago', 'desc')->get();
 
         return view('aportaciones.socio', compact('socio', 'aportaciones'));
+    }
+
+    /**
+     * Muestra la vista para generar aportaciones automáticamente.
+     */
+    public function generarAportacionesView()
+    {
+        return view('aportaciones.generar');
+    }
+
+    /**
+     * Genera aportaciones para todos los socios basándose en su última aportación.
+     */
+    public function generarAportaciones(Request $request)
+    {
+        $request->validate([
+            'fecha' => 'required|date',
+        ]);
+
+        $fecha = $request->fecha;
+
+        DB::transaction(function () use ($fecha) {
+            $socios = Socio::all();
+            
+            foreach ($socios as $socio) {
+                $ultimaAportacion = $socio->aportaciones()->latest('fecha_pago')->first();
+                
+                if ($ultimaAportacion) {
+                    Aportacion::create([
+                        'socio_id' => $socio->id,
+                        'fecha_pago' => $fecha,
+                        'monto' => $ultimaAportacion->monto,
+                    ]);
+
+                    // Actualizar saldo de ahorro del socio
+                    $socio->saldo_ahorro += $ultimaAportacion->monto;
+                    $socio->save();
+                }
+            }
+        });
+
+        return redirect()->route('dashboard')->with('success', 'Aportaciones generadas correctamente.');
     }
 
 }

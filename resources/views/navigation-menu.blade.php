@@ -18,6 +18,7 @@
                     <x-nav-link href="{{ route('socios.index') }}" :active="request()->routeIs('socios.index')">
                         Socios
                     </x-nav-link>
+                
                     
                     <x-nav-link href="{{ route('prestamos.socios') }}" :active="request()->routeIs('prestamos.socios')">
                         Prestamos

@@ -13,7 +13,7 @@ class Socio extends Model
         'nombre', 'apellido_paterno', 'apellido_materno',
         'email', 'telefono', 'saldo_ahorro', 'activo',
     ];
-
+   
     // Relación uno a muchos con Aportaciones
     public function aportaciones()
     {

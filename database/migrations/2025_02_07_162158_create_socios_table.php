@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('apellido_materno')->nullable();
             $table->string('email')->unique();
             $table->string('telefono')->nullable();
-            $table->date('fecha_ingreso')->default(DB::raw('CURRENT_DATE'));
+            $table->date('fecha_ingreso');
             $table->decimal('saldo_ahorro', 10, 2)->default(0);
             $table->boolean('activo')->default(true);
             $table->timestamps();

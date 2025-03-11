@@ -29,13 +29,7 @@
                             <td class="border px-4 py-2">${{ number_format($aportacion->monto, 2) }}</td>
                             <td class="border px-4 py-2">{{ $aportacion->fecha_pago }}</td>
                             <td class="border px-4 py-2 flex space-x-2">
-                                <a href="{{ route('aportaciones.show', $aportacion) }}" class="px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700">Ver</a>
-                                <a href="{{ route('aportaciones.edit', $aportacion) }}" class="px-3 py-1 bg-yellow-500 text-white rounded hover:bg-yellow-600">Editar</a>
-                                <form action="{{ route('aportaciones.destroy', $aportacion) }}" method="POST" onsubmit="return confirm('¿Eliminar esta aportación?')">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700">Eliminar</button>
-                                </form>
+                                
                             </td>
                         </tr>
                     @endforeach

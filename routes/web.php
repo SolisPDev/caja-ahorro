@@ -11,7 +11,13 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/socios/estado-prestamos', [SocioController::class, 'sociosPorEstado'])->name('socios.estadoPrestamos');
+Route::get('/aportaciones/generar', [AportacionController::class, 'generarAportacionesView'])->name('aportaciones.generar');
+Route::post('/aportaciones/generar', [AportacionController::class, 'generarAportaciones'])->name('aportaciones.procesar');
+
 Route::middleware(['auth', 'verified'])->get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+Route::get('/socios/{socio}/historial', [SocioController::class, 'historialPrestamo'])->name('socios.historial');
 
 // Vista de estado de cuenta del socio
 Route::get('/socios/{id}/estadoCuenta', [SocioController::class, 'estadoCuenta'])->name('socios.estadoCuenta');
@@ -20,7 +26,7 @@ Route::resource('socios', SocioController::class)->middleware('auth');
 Route::resource('aportaciones', AportacionController::class)->middleware('auth');
 Route::get('/socios/{socio}/aportaciones', [AportacionController::class, 'showBySocio'])->name('aportaciones.socio');
 Route::get('/aportaciones/create/{socio}', [AportacionController::class, 'create'])->name('aportaciones.create');
-Route::get('/aportaciones/{socio}', [AportacionController::class, 'index'])->name('aportaciones.index');
+Route::get('/aportaciones', [AportacionController::class, 'index'])->name('aportaciones.index');
 
 // Rutas para el control de prestamos
 Route::get('/prestamos/socios', [PrestamoController::class, 'listarSocios'])->name('prestamos.socios');
@@ -46,3 +52,5 @@ Route::get('/socios/{socio}/estado-cuenta', [SocioController::class, 'mostrarEst
 
 
 Route::post('/abonos', [AbonoController::class, 'store'])->name('abonos.store');
+
+
