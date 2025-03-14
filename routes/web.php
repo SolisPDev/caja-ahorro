@@ -16,7 +16,7 @@ Route::get('/aportaciones/generar', [AportacionController::class, 'generarAporta
 Route::post('/aportaciones/generar', [AportacionController::class, 'generarAportaciones'])->name('aportaciones.procesar');
 
 Route::middleware(['auth', 'verified'])->get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-
+Route::get('/prestamos/socio/{socio}', [PrestamoController::class, 'prestamosPorSocio'])->name('prestamos.socio');
 Route::get('/socios/{socio}/historial', [SocioController::class, 'historialPrestamo'])->name('socios.historial');
 
 // Vista de estado de cuenta del socio

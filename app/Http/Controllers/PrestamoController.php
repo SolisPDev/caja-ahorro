@@ -23,11 +23,11 @@ class PrestamoController extends Controller
     {
         $socio = Socio::findOrFail($socio_id);
 
-        // Verificar si el socio ya tiene un préstamo activo
-        if ($socio->prestamos()->where('estado', 'Activo')->exists()) {
-            return redirect()->route('prestamos.index')
-                ->with('error', 'El socio ya tiene un préstamo activo.');
-        }
+        //Verificar si el socio ya tiene un préstamo activo
+        //if ($socio->prestamos()->where('estado', 'Activo')->exists()) {
+        //    return redirect()->route('prestamos.index')
+        //        ->with('error', 'El socio ya tiene un préstamo activo.');
+        //}
 
         return view('prestamos.create', compact('socio'));
     }
@@ -48,9 +48,9 @@ class PrestamoController extends Controller
         $socio = Socio::findOrFail($request->socio_id);
 
         // Verificar si el socio ya tiene un préstamo activo
-        if ($socio->prestamos()->where('estado', 'Activo')->exists()) {
-            return redirect()->back()->with('error', 'El socio ya tiene un préstamo activo.');
-        }
+        //if ($socio->prestamos()->where('estado', 'Activo')->exists()) {
+        //    return redirect()->back()->with('error', 'El socio ya tiene un préstamo activo.');
+        //}
 
         // Calcular el total a pagar con interés
         $total_pagar = $request->monto + ($request->monto * ($request->tasa_interes / 100));
@@ -148,4 +148,11 @@ class PrestamoController extends Controller
         $socios = Socio::all(); // Obtener todos los socios
         return view('prestamos.socios', compact('socios'));
     }
+
+    public function prestamosPorSocio($socio_id)
+    {
+        $socio = Socio::with('prestamos')->findOrFail($socio_id);
+        return view('prestamos.socio', compact('socio'));
+    }
+
 }
