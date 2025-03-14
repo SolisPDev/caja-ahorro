@@ -63,5 +63,5 @@ _Aquí puedes agregar imágenes del sistema funcionando._
 Este proyecto está bajo la licencia **MIT**.
 
 ---
-_Hecho con ❤️ y Laravel._
+_Proyecto: desarrollado por Horizondevs.net_
 
